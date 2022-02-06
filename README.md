@@ -53,3 +53,16 @@ We can solve Question 2 efficiently by splitting our input up into distinct case
 
 `e<o`
 - One way to go about this case is to convert all pairs of odds into an e (as the sum of 2 odds is always even) until we have the case `o==e`. However sometimes we won't be able to get to this case. For example if we have 4 odds, after converting one pair of odds  we get 2 odds and one even. It is impossible to get to `o==e` with two odds and an even but we can get to the case of `e>o` by converting the second pair as well. We could go back to the `e>o` case and solve but another method to tackle this case is to algorithmically check when this will happen (i.e. when we will get a case like 4 odds) and subtract 2 because we know we can convert 4 odds into an even
+
+In code we can write this as
+```
+int solve(int e, int o, int n) {
+  if (e > o)  return (o * 2) + 1;   //if e>o than we can just treat it as e=o since our extra e's cannot make an odd but can be put with other e's to get rid of themselves
+  if (o > e) {                      //if o>e convert some o's to e's   
+    o += (e * 2); e = 0;          
+    if ((o - 4) % 3 == 0) o -= ceil((o - 1) / 3.0) + 2;   
+    else o -= ceil((o - 1) / 3.0);                          
+  }
+  return o+e;                       //return o+e which would be n if o==e and first two 'if' statements were passed, or o if the second 'if' statement was true
+}
+```
